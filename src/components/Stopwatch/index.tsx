@@ -1,19 +1,29 @@
-import { tempoParaSegundos } from "../../common/utils/date";
+import { useEffect, useState } from "react";
+import { tempoParaSegundos } from "../../common/utils/time";
+import { ITarefa } from "../../types/tarefa";
 import Button from "../Button";
-import Clock from './Clock';
-import style from './Stopwatch.module.scss';
+import Clock from "./Clock";
+import style from "./Stopwatch.module.scss";
 
-export default function Stopwatch(){
-  console.log('conversao: ', tempoParaSegundos('01:01:01'));
+interface Props {
+  selecionado: ITarefa | undefined;
+}
+
+export default function Stopwatch({ selecionado }: Props) {
+  const [tempo, setTempo] = useState<number>();
+
+  useEffect(() => {
+   if(selecionado?.tempo){
+    setTempo(tempoParaSegundos(selecionado.tempo));
+   }
+  }, [selecionado])
   return (
     <div className={style.cronometro}>
       <p className={style.titulo}>Escolha um card e inicie o cronômetro!</p>
       <div className={style.relogioWrapper}>
         <Clock />
       </div>
-      <Button>
-        Começar
-      </Button>
+      <Button>Começar</Button>
     </div>
-  )
+  );
 }
